@@ -1,7 +1,12 @@
 import { ref } from 'vue';
 
-export function useAudioControl(name = 'unnamed') {
+// シングルトンインスタンスを保持する変数
+let instance: ReturnType<typeof createAudioControl> | null = null;
+
+// 実際の実装を行う内部関数
+function createAudioControl(name = 'singleton') {
   console.log(`useAudioControl "${name}" インスタンス作成`);
+  
   // ローカルストレージからミュート状態を読み込む
   const loadMuteState = () => {
     const savedState = localStorage.getItem('vocaloidDiagnosis_isMuted');
@@ -14,7 +19,7 @@ export function useAudioControl(name = 'unnamed') {
   // 音量をON/OFFするトグル関数
   const toggleMute = () => {
     isMuted.value = !isMuted.value;
-    console.log(`"${name}" インスタンスの isMuted.value: ${isMuted.value}`);
+    console.log(`シングルトンインスタンスの isMuted.value: ${isMuted.value}`);
     
     // すべての動画と音声要素に適用
     document.querySelectorAll('video, audio').forEach(element => {
@@ -24,18 +29,19 @@ export function useAudioControl(name = 'unnamed') {
     });
     
     // ミュート状態をローカルストレージに保存
-    // localStorage.setItem('vocaloidDiagnosis_isMuted', isMuted.value.toString());
+    localStorage.setItem('vocaloidDiagnosis_isMuted', isMuted.value.toString());
     
     console.log(`音量が${isMuted.value ? 'OFF' : 'ON'}になりました`);
   };
   
   // 現在の音量状態を取得
   const getMuteState = () => isMuted.value;
+  
   // フェードアウトの実装
   const fadeOut = async (audio: HTMLVideoElement, duration: number = 150) => {
     return new Promise<void>((resolve) => {
       const startVolume = audio.volume;
-      console.log(`"${name}" インスタンスのfadeOut実行 isMuted.value: ${isMuted.value}`);
+      console.log(`シングルトンインスタンスのfadeOut実行 isMuted.value: ${isMuted.value}`);
       const startTime = performance.now();
 
       const updateVolume = () => {
@@ -61,17 +67,17 @@ export function useAudioControl(name = 'unnamed') {
 
   // フェードインの実装
   const fadeIn = async (audio: HTMLVideoElement, duration: number = 150) => {
-    console.log(`"${name}" インスタンスのfadeIn開始時 isMuted.value: ${isMuted.value}`);
+    console.log(`シングルトンインスタンスのfadeIn開始時 isMuted.value: ${isMuted.value}`);
     return new Promise<void>((resolve) => {
       const targetVolume = 0.1;
       audio.volume = 0;
-      console.log(`"${name}" インスタンスのfadeIn play前 isMuted.value: ${isMuted.value}`);
+      console.log(`シングルトンインスタンスのfadeIn play前 isMuted.value: ${isMuted.value}`);
       
       // 再生開始
       audio.play().then(() => {
         // 再生開始後にアプリケーション全体のミュート設定を適用
         audio.muted = isMuted.value;
-        console.log(`"${name}" インスタンスのfadeIn play後 isMuted.value: ${isMuted.value}`);
+        console.log(`シングルトンインスタンスのfadeIn play後 isMuted.value: ${isMuted.value}`);
       }).catch(err => {
         console.error('動画再生エラー:', err);
       });
@@ -104,4 +110,16 @@ export function useAudioControl(name = 'unnamed') {
     getMuteState,
     isMuted
   };
+}
+
+// 外部に公開する関数（シングルトンを返す）
+export function useAudioControl(name = 'caller') {
+  // インスタンスがなければ作成、あれば既存のものを返す
+  if (!instance) {
+    console.log(`初回呼び出し: "${name}"からのリクエストでインスタンスを作成`);
+    instance = createAudioControl();
+  } else {
+    console.log(`既存インスタンスを返します: "${name}"からの呼び出し`);
+  }
+  return instance;
 }
