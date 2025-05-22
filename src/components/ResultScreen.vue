@@ -321,7 +321,6 @@ const resultType = computed(() => {
   justify-content: center;
   text-align: center;
   transition: all 0.3s ease;
-  overflow: hidden;
   position: relative;
   border-radius: 5px;
 }

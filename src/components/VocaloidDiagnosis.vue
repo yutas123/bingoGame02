@@ -852,6 +852,13 @@ onMounted(() => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* 800px以下のときに「知ってる」「知らない」ボタンを非表示にする */
+@media (max-width: 800px) {
+  .manual-buttons {
+    display: none;
+  }
+}
+
 /* スワイプカードコンテナのスタイル */
 .swipe-card-container {
   position: relative;
