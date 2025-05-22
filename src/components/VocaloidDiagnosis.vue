@@ -300,7 +300,7 @@ const {
 } = useEffects();
 
 // 音声制御関連
-const { toggleMute, isMuted } = useAudioControl();
+const { toggleMute, isMuted } = useAudioControl('VocaloidDiagnosis');
 
 // Tinderカード関連
 const {

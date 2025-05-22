@@ -5,7 +5,7 @@ import { useAudioControl } from './useAudioControl';
 
 export function useEffects() {
   // 音声制御の状態を取得
-  const { isMuted } = useAudioControl();
+  const { isMuted } = useAudioControl('Effects');
   // エフェクト関連の状態
   const showKnowEffect = ref(false);
   const showDontKnowEffect = ref(false);

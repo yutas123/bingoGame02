@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 
-export function useAudioControl() {
+export function useAudioControl(name = 'unnamed') {
+  console.log(`useAudioControl "${name}" インスタンス作成`);
   // ローカルストレージからミュート状態を読み込む
   const loadMuteState = () => {
     const savedState = localStorage.getItem('vocaloidDiagnosis_isMuted');
@@ -13,6 +14,7 @@ export function useAudioControl() {
   // 音量をON/OFFするトグル関数
   const toggleMute = () => {
     isMuted.value = !isMuted.value;
+    console.log(`"${name}" インスタンスの isMuted.value: ${isMuted.value}`);
     
     // すべての動画と音声要素に適用
     document.querySelectorAll('video, audio').forEach(element => {
@@ -22,7 +24,7 @@ export function useAudioControl() {
     });
     
     // ミュート状態をローカルストレージに保存
-    localStorage.setItem('vocaloidDiagnosis_isMuted', isMuted.value.toString());
+    // localStorage.setItem('vocaloidDiagnosis_isMuted', isMuted.value.toString());
     
     console.log(`音量が${isMuted.value ? 'OFF' : 'ON'}になりました`);
   };
@@ -33,7 +35,7 @@ export function useAudioControl() {
   const fadeOut = async (audio: HTMLVideoElement, duration: number = 150) => {
     return new Promise<void>((resolve) => {
       const startVolume = audio.volume;
-      console.log("fadeOut");
+      console.log(`"${name}" インスタンスのfadeOut実行 isMuted.value: ${isMuted.value}`);
       const startTime = performance.now();
 
       const updateVolume = () => {
@@ -59,13 +61,20 @@ export function useAudioControl() {
 
   // フェードインの実装
   const fadeIn = async (audio: HTMLVideoElement, duration: number = 150) => {
-    console.log("fadeIn");
+    console.log(`"${name}" インスタンスのfadeIn開始時 isMuted.value: ${isMuted.value}`);
     return new Promise<void>((resolve) => {
       const targetVolume = 0.1;
       audio.volume = 0;
-      // 再生前にミュート状態を設定
-      audio.muted = isMuted.value;
-      audio.play();
+      console.log(`"${name}" インスタンスのfadeIn play前 isMuted.value: ${isMuted.value}`);
+      
+      // 再生開始
+      audio.play().then(() => {
+        // 再生開始後にアプリケーション全体のミュート設定を適用
+        audio.muted = isMuted.value;
+        console.log(`"${name}" インスタンスのfadeIn play後 isMuted.value: ${isMuted.value}`);
+      }).catch(err => {
+        console.error('動画再生エラー:', err);
+      });
 
       const startTime = performance.now();
 

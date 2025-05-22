@@ -77,7 +77,7 @@ export function useTinderCards(
    * 現在表示中のカードの動画だけを再生し、他は一時停止します
    */
   // 音声制御の初期化
-  const { fadeOut, fadeIn, isMuted } = useAudioControl();
+  const { fadeOut, fadeIn, isMuted } = useAudioControl('TinderCards');
 
   const controlVideos = () => {
     videoRefs.value.forEach((video, index) => {
