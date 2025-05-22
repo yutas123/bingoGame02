@@ -1,6 +1,12 @@
 <template>
   <div class="result-screen">
     <div class="result-card">
+      <!-- 音量ボタン（グローバル設定） -->
+      <button @click="$emit('toggleMute')" class="volume-btn result-volume-btn" title="音声設定（全体に適用されます）">
+        <span v-if="isMuted">🔇</span>
+        <span v-else>🔊</span>
+        <span class="volume-tooltip">全体設定</span>
+      </button>
       <h2 class="result-title">診断結果</h2>
     <div class="result-type">
       <h3 class="type-title">あなたのタイプは…</h3>
@@ -471,10 +477,32 @@ const resultType = computed(() => {
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.2);
   transition: background-color 0.3s;
+  position: relative;
 }
 
 .volume-btn:hover {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 音量ボタンのツールチップ */
+.volume-tooltip {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.volume-btn:hover .volume-tooltip {
+  opacity: 1;
 }
 
 /* 結果画面の音量ボタン */

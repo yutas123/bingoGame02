@@ -1,8 +1,14 @@
 import { ref } from 'vue';
 
 export function useAudioControl() {
-  // 音量のON/OFF状態を管理
-  const isMuted = ref(false);
+  // ローカルストレージからミュート状態を読み込む
+  const loadMuteState = () => {
+    const savedState = localStorage.getItem('vocaloidDiagnosis_isMuted');
+    return savedState === 'true';
+  };
+  
+  // 音量のON/OFF状態を管理（ローカルストレージから初期値を取得）
+  const isMuted = ref(loadMuteState());
   
   // 音量をON/OFFするトグル関数
   const toggleMute = () => {
@@ -14,6 +20,9 @@ export function useAudioControl() {
         element.muted = isMuted.value;
       }
     });
+    
+    // ミュート状態をローカルストレージに保存
+    localStorage.setItem('vocaloidDiagnosis_isMuted', isMuted.value.toString());
     
     console.log(`音量が${isMuted.value ? 'OFF' : 'ON'}になりました`);
   };
@@ -54,6 +63,8 @@ export function useAudioControl() {
     return new Promise<void>((resolve) => {
       const targetVolume = 0.1;
       audio.volume = 0;
+      // 再生前にミュート状態を設定
+      audio.muted = isMuted.value;
       audio.play();
 
       const startTime = performance.now();

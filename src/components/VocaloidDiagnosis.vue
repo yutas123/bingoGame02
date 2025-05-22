@@ -113,10 +113,11 @@
         ※このサイトは「音声」が流れます。<br>周りの環境や音量にご注意ください！
       </p>
       
-      <!-- 音量ボタン -->
-      <button @click="toggleMute" class="volume-btn">
+      <!-- 音量ボタン（グローバル設定） -->
+      <button @click="toggleMute" class="volume-btn" title="音声設定（全体に適用されます）">
         <span v-if="isMuted">🔇</span>
         <span v-else>🔊</span>
+        <span class="volume-tooltip">全体設定</span>
       </button>
     </div>
     
@@ -128,10 +129,11 @@
             <div class="progress-fill" :style="{ width: `${(answeredCount / totalQuestions) * 100}%` }"></div>
           </div>
           <div class="progress-text">{{ answeredCount }}/{{ totalQuestions }}曲</div>
-          <!-- 音量ボタン -->
-          <button @click="toggleMute" class="volume-btn">
+          <!-- 音量ボタン（グローバル設定） -->
+          <button @click="toggleMute" class="volume-btn" title="音声設定（全体に適用されます）">
             <span v-if="isMuted">🔇</span>
             <span v-else>🔊</span>
+            <span class="volume-tooltip">全体設定</span>
           </button>
         </div>
         
@@ -775,10 +777,32 @@ onMounted(() => {
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.2);
   transition: background-color 0.3s;
+  position: relative;
 }
 
 .volume-btn:hover {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 音量ボタンのツールチップ */
+.volume-tooltip {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.volume-btn:hover .volume-tooltip {
+  opacity: 1;
 }
 
 /* スタート画面の音量ボタン */
