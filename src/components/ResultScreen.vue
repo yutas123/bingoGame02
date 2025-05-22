@@ -3,8 +3,8 @@
     <div class="result-card">
       <!-- 音量ボタン（グローバル設定） -->
       <button @click="$emit('toggleMute')" class="volume-btn result-volume-btn" title="音声設定（全体に適用されます）">
-        <span v-if="isMuted">🔇</span>
-        <span v-else>🔊</span>
+        <img v-if="isMuted" src="/src/assets/img/volume_off.svg" alt="ミュート" class="volume-icon">
+        <img v-else src="/src/assets/img/volume_on.svg" alt="音量オン" class="volume-icon">
         <span class="volume-tooltip">全体設定</span>
       </button>
       <h2 class="result-title">診断結果</h2>
@@ -476,7 +476,7 @@ const resultType = computed(() => {
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.2);
   transition: background-color 0.3s;
-  position: relative;
+  position: absolute;
 }
 
 .volume-btn:hover {
@@ -502,6 +502,12 @@ const resultType = computed(() => {
 
 .volume-btn:hover .volume-tooltip {
   opacity: 1;
+}
+
+/* 音量アイコンのスタイル */
+.volume-icon {
+  width: 24px;
+  height: 24px;
 }
 
 /* 結果画面の音量ボタン */
