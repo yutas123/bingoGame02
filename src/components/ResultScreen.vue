@@ -1,12 +1,6 @@
 <template>
   <div class="result-screen">
     <div class="result-card">
-      <!-- 音量ボタン（グローバル設定） -->
-      <button @click="$emit('toggleMute')" class="volume-btn result-volume-btn" title="音声設定（全体に適用されます）">
-        <img v-if="isMuted" src="/src/assets/img/volume_off.svg" alt="ミュート" class="volume-icon">
-        <img v-else src="/src/assets/img/volume_on.svg" alt="音量オン" class="volume-icon">
-        <span class="volume-tooltip">全体設定</span>
-      </button>
       <h2 class="result-title">診断結果</h2>
     <div class="result-type">
       <h3 class="type-title">あなたのタイプは…</h3>
