@@ -17,7 +17,7 @@
           class="title-swiper"
         >
           <swiper-slide v-for="n in 5" :key="n">
-            <img src="/src/assets/img/title_bg03.svg" alt="Background" class="title-bg-img"/>
+            <img src="/src/assets/img/title_bg.svg" alt="Background" class="title-bg-img"/>
           </swiper-slide>
         </swiper>
       
@@ -35,7 +35,7 @@
           class="title-swiper"
         >
           <swiper-slide v-for="n in 5" :key="n">
-            <img src="/src/assets/img/title_bg03.svg" alt="Background" class="title-bg-img"/>
+            <img src="/src/assets/img/title_bg.svg" alt="Background" class="title-bg-img"/>
           </swiper-slide>
         </swiper>
       
@@ -54,7 +54,7 @@
           class="title-swiper"
         >
           <swiper-slide v-for="n in 5" :key="n">
-            <img src="/src/assets/img/title_bg03.svg" alt="Background" class="title-bg-img" />
+            <img src="/src/assets/img/title_bg.svg" alt="Background" class="title-bg-img" />
           </swiper-slide>
         </swiper>
     
@@ -72,7 +72,7 @@
           class="title-swiper"
         >
           <swiper-slide v-for="n in 5" :key="n">
-            <img src="/src/assets/img/title_bg03.svg" alt="Background" class="title-bg-img" />
+            <img src="/src/assets/img/title_bg.svg" alt="Background" class="title-bg-img" />
           </swiper-slide>
         </swiper>
       </div>
@@ -117,7 +117,7 @@
       <button @click="toggleMute" class="volume-btn" title="音声設定（全体に適用されます）">
         <img v-if="isMuted" src="/src/assets/img/volume_off.svg" alt="ミュート" class="volume-icon">
         <img v-else src="/src/assets/img/volume_on.svg" alt="音量オン" class="volume-icon">
-        <span class="volume-tooltip">全体設定</span>
+        <span class="volume-tooltip">音量設定</span>
       </button>
     </div>
     
@@ -133,7 +133,7 @@
           <button @click="toggleMute" class="volume-btn" title="音声設定（全体に適用されます）">
             <img v-if="isMuted" src="/src/assets/img/volume_off.svg" alt="ミュート" class="volume-icon">
             <img v-else src="/src/assets/img/volume_on.svg" alt="音量オン" class="volume-icon">
-            <span class="volume-tooltip">全体設定</span>
+            <span class="volume-tooltip">音量設定</span>
           </button>
         </div>
         
