@@ -44,11 +44,12 @@
           :class="{ 'known-song': knownSongs.includes(song.id) }"
         >
           <div class="song-box-content">
-            <img v-if="knownSongs.includes(song.id)" 
-                 :src="getSongThumbnail(song)" 
+            <img :src="getSongThumbnail(song)" 
                  :alt="song.title"
                  class="song-thumbnail">
-            <div v-else class="unknown-song-overlay"></div>
+            <div v-if="!knownSongs.includes(song.id)" class="unknown-song-overlay">
+              <span class="unknown-icon">?</span>
+            </div>
           </div>
         </div>
       </div>
@@ -429,8 +430,38 @@ const resultType = computed(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(128, 128, 128, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+/* ホバー時のオーバーレイ効果 */
+.song-box:hover .unknown-song-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* 知らない曲の？アイコン */
+.unknown-icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+/* ホバー時の？アイコン効果 */
+.song-box:hover .unknown-icon {
+  transform: scale(1.1);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 /* シェアボタンのスタイル */
