@@ -1,15 +1,22 @@
 <template>
   <div class="result-screen">
     <div class="result-card">
-      <h2 class="result-title">診断結果</h2>
-    <div class="result-type">
-      <h3 class="type-title">あなたのタイプは…</h3>
-      <div class="type-result">{{ resultType.name }}</div>
-      
-      <div class="type-descriptionWrap">
-        <p class="type-description" v-for="(line, index) in resultType.description" :key="index">{{ line }}</p>
+      <div class="result-header">
+        <h2 class="result-title">診断結果</h2>
+        <div class="result-decoration"></div>
       </div>
-    </div>
+      
+      <div class="result-type">
+        <h3 class="type-title">あなたのタイプは…</h3>
+        <div class="type-result-container">
+          <div class="type-result">{{ resultType.name }}</div>
+          <div class="type-badge">{{ resultType.id }}</div>
+        </div>
+        
+        <div class="type-description-wrap">
+          <p class="type-description" v-for="(line, index) in resultType.description" :key="index">{{ line }}</p>
+        </div>
+      </div>
     
     <!-- 時代別カバー率 -->
     <div class="era-stats-section">
@@ -98,7 +105,7 @@ defineEmits<{
 }>();
 
 // 時代の日本語名マッピング
-const eraNames = {
+const eraNames: Record<string, string> = {
   dawn: '黎明期',
   boom: '第1次ブーム',
   gold: '黄金期',
@@ -285,16 +292,78 @@ const resultType = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: fadeIn 0.8s ease-out;
 }
 
 .result-card {
-  background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding-top: 30px;
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.04);
+  padding: 40px 30px 30px;
   width: 100%;
   max-width: 800px;
   position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+/* ヘッダー部分の新しいスタイル */
+.result-header {
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.result-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ff6b9d, #ff9d6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 15px;
+  animation: slideInDown 0.6s ease-out 0.2s both;
+}
+
+.result-decoration {
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(135deg, #ff6b9d, #ff9d6b);
+  border-radius: 2px;
+  margin: 0 auto;
+  animation: expandWidth 0.8s ease-out 0.4s both;
+}
+
+/* アニメーション定義 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expandWidth {
+  from {
+    width: 0;
+  }
+  to {
+    width: 60px;
+  }
 }
 
 /* 7×7のグリッドレイアウト */
@@ -431,6 +500,56 @@ const resultType = computed(() => {
   color: #FFCC00;
 }
 
+.share-section {
+  margin: 20px 0 30px;
+  text-align: center;
+}
+
+.share-title {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.share-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.share-btn {
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  padding: 0;
+}
+
+.share-btn.facebook-btn img,.share-btn.line-btn img{
+  width: 45px;
+  height: 45px;
+}
+
+.share-icon {
+  width: 22px;
+  object-fit: contain;
+}
+
+.share-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.x-btn {
+  background-color: #000000;
+}
+
 .restart-section {
   display: flex;
   justify-content: center;
@@ -514,82 +633,141 @@ const resultType = computed(() => {
 /* タイプ結果のスタイル */
 .result-type {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+  animation: slideInUp 0.8s ease-out 0.6s both;
 }
 
 .type-title {
-  font-size: 15px;
-  color: #666;
-  margin-bottom: 10px;
-  font-weight: normal;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.type-result-container {
+  position: relative;
+  margin-bottom: 30px;
 }
 
 .type-result {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #39C5BB;
-  margin-bottom: 25px;
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ff6b9d, #ff9d6b, #ff79a7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 15px;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-.type-description {
-  font-size: 15px;
-  color: #555;
-  line-height: 1.5;
+.type-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff6b9d, #ff9d6b);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+  margin-top: 10px;
+}
+
+.type-description-wrap {
   max-width: 600px;
   margin: 0 auto;
 }
 
+.type-description {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* 時代別カバー率のスタイル */
 .era-stats-section {
-  margin: 20px 0 25px;
+  margin: 30px 0 40px;
+  animation: slideInUp 0.8s ease-out 0.8s both;
 }
 
 .era-stats-title {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: #333;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-weight: 600;
 }
 
 .era-stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 25px;
+  padding: 0 10px;
 }
 
 .era-stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.era-stat-item:hover {
+  transform: translateY(-5px);
 }
 
 .era-name {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: #666;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   text-align: center;
   white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
 .circle-progress {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  transition: all 0.3s ease;
+}
+
+.era-stat-item:hover .circle-progress {
+  transform: scale(1.05);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
 }
 
 .circle-bg {
   fill: none;
-  stroke: #f0f0f0;
-  stroke-width: 8;
+  stroke: #f5f5f5;
+  stroke-width: 6;
 }
 
 .circle-progress-path {
   fill: none;
-  stroke-width: 8;
+  stroke-width: 6;
   stroke-linecap: round;
   transform: rotate(-90deg);
   transform-origin: center;
-  transition: stroke-dasharray 0.8s ease;
+  transition: stroke-dasharray 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .percentage {
@@ -597,17 +775,29 @@ const resultType = computed(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.8rem;
-  font-weight: bold;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #333;
 }
 
-/* 各時代の色 */
-.dawn .circle-progress-path { stroke: #4285F4; }
-.boom .circle-progress-path { stroke: #34A853; }
-.gold .circle-progress-path { stroke: #FBBC05; }
-.diserve .circle-progress-path { stroke: #EA4335; }
-.revival .circle-progress-path { stroke: #9C27B0; }
-.ai .circle-progress-path { stroke: #00BCD4; }
+/* 各時代の色 - より洗練されたカラーパレット */
+.dawn .circle-progress-path { stroke: #667eea; }
+.dawn .percentage { color: #667eea; }
+
+.boom .circle-progress-path { stroke: #f093fb; }
+.boom .percentage { color: #f093fb; }
+
+.gold .circle-progress-path { stroke: #ffecd2; stroke: #fcb69f; }
+.gold .percentage { color: #fcb69f; }
+
+.diserve .circle-progress-path { stroke: #a8edea; }
+.diserve .percentage { color: #a8edea; }
+
+.revival .circle-progress-path { stroke: #d299c2; }
+.revival .percentage { color: #d299c2; }
+
+.ai .circle-progress-path { stroke: #89f7fe; }
+.ai .percentage { color: #89f7fe; }
 
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
