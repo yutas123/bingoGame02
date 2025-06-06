@@ -43,7 +43,13 @@
           class="song-box"
           :class="{ 'known-song': knownSongs.includes(song.id) }"
         >
-          <div class="song-box-content"></div>
+          <div class="song-box-content">
+            <img v-if="knownSongs.includes(song.id)" 
+                 :src="getSongThumbnail(song)" 
+                 :alt="song.title"
+                 class="song-thumbnail">
+            <div v-else class="unknown-song-overlay"></div>
+          </div>
         </div>
       </div>
 
@@ -90,6 +96,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { vocaloidSongs } from '../data/songs';
+import type { VocaloidSong } from '../type';
 
 // propsの定義
 const props = defineProps<{
@@ -103,6 +110,17 @@ defineEmits<{
   (e: 'toggleMute'): void;
   (e: 'resetDiagnosis'): void;
 }>();
+
+// 楽曲のサムネイル画像パスを取得する関数
+const getSongThumbnail = (song: VocaloidSong): string => {
+  // videoPathから拡張子を変更してサムネイルパスを生成
+  if (song.videoPath) {
+    const thumbnailName = song.videoPath.replace('.mp4', '.jpg');
+    return `/src/assets/img/thumbnails/${thumbnailName}`;
+  }
+  // videoPathがない場合はデフォルト画像
+  return '/src/assets/img/thumbnail.jpg';
+};
 
 // 時代の日本語名マッピング
 const eraNames: Record<string, string> = {
@@ -386,11 +404,32 @@ const resultType = computed(() => {
   transition: all 0.3s ease;
   position: relative;
   border-radius: 5px;
+  overflow: hidden;
 }
 
 .song-box-content {
   width: 100%;
   height: 100%;
+  border-radius: 4px;
+  position: relative;
+}
+
+/* 知ってる曲の画像スタイル */
+.song-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* 知らない曲の灰色オーバーレイ */
+.unknown-song-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(128, 128, 128, 0.7);
   border-radius: 4px;
 }
 
