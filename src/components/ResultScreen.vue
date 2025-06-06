@@ -296,7 +296,25 @@ const resultType = computed(() => {
     };
   }
   
-  // 5. newcomer（ビギナータイプ）: 総正答率 ≤ 20%（上記のいずれにも当てはまらない場合も含む）
+  // 5. knowledgeable（ものしりタイプ）: 総正答率 50-79%
+  if (totalCorrectRate.value >= 50 && totalCorrectRate.value < 80) {
+    return {
+      id: 'knowledgeable',
+      name: 'ものしりタイプ',
+      description: ['豊富な知識をお持ちですね。', '好きな曲を中心に幅広く楽しんでいますね。']
+    };
+  }
+  
+  // 6. casual（カジュアルタイプ）: 総正答率 30-49%
+  if (totalCorrectRate.value >= 30 && totalCorrectRate.value < 50) {
+    return {
+      id: 'casual',
+      name: 'カジュアルタイプ',
+      description: ['有名どころはしっかり押さえています。', 'これから深掘りしていく楽しみがありますね。']
+    };
+  }
+  
+  // 7. newcomer（ビギナータイプ）: 総正答率 < 30%
   return {
     id: 'newcomer',
     name: 'ビギナータイプ',

@@ -49,7 +49,6 @@ export const vocaloidSongs: VocaloidSong[] = [
     year: 2009,
     era: "dawn",
     videoPath: "06_JustBeFriends.mp4",
-
   },
   {
     id: 7,
