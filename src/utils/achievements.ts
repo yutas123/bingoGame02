@@ -15,14 +15,14 @@ export function calculateAchievements(selectedSongs: number[], allSongs: Vocaloi
   // 選択された曲の詳細情報を取得
   const selectedSongDetails = allSongs.filter(song => selectedSongs.includes(song.id));
   
-  // ボーカリスト別のカウント
+  // ボーカリスト別のカウント（現在は使用していない）
   const vocalistCount: Record<string, number> = {};
-  selectedSongDetails.forEach(song => {
-    const vocalists = song.vocalist.split('・');
-    vocalists.forEach(vocalist => {
-      vocalistCount[vocalist] = (vocalistCount[vocalist] || 0) + 1;
-    });
-  });
+  // selectedSongDetails.forEach(song => {
+  //   const vocalists = song.vocalist.split('・');
+  //   vocalists.forEach(vocalist => {
+  //     vocalistCount[vocalist] = (vocalistCount[vocalist] || 0) + 1;
+  //   });
+  // });
   
   // プロデューサー別のカウント
   const producerCount: Record<string, number> = {};

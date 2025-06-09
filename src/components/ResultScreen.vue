@@ -170,11 +170,6 @@ const eraStats = computed(() => {
   return stats;
 });
 
-// 全時代の平均カバー率
-const averageEraRate = computed(() => {
-  const rates = Object.values(eraStats.value).map(stat => stat.rate);
-  return rates.reduce((sum, rate) => sum + rate, 0) / rates.length;
-});
 
 // 最もカバー率が高い時代を取得
 const highestEra = computed(() => {

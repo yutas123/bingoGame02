@@ -1,7 +1,6 @@
 // src/composables/useDiagnosisState.ts
 import { ref, computed } from 'vue';
 import type { VocaloidSong } from '../type';
-import { vocaloidSongs } from '../data/songs';
 
 export function useDiagnosisState() {
   // 基本的な状態

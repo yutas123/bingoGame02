@@ -268,8 +268,7 @@ const {
   remainingSongs,
   answeredCount,
   totalQuestions,
-  currentSong,
-  eraLabels
+  currentSong
 } = useDiagnosisState();
 // 分割代入で取得しているのは関数の「戻り値」ですが、
 // 関数自体の「実行」は全てのコードを実行します
@@ -293,7 +292,6 @@ const {
   showKnowEffect,
   showDontKnowEffect,
   currentKnowComment,
-  currentSongForEffect,
   initSounds,
   displayKnowEffect,
   displayDontKnowEffect
@@ -373,7 +371,7 @@ const preloadInitialVideos = () => {
   let loadedVideos = 0;
   
   // 各曲の動画をプリロード
-  initialSongs.forEach((song, index) => {
+  initialSongs.forEach((song) => {
     if (song.videoPath) {
       const video = document.createElement('video');
       video.preload = 'auto';
