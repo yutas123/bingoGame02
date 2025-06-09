@@ -8,6 +8,7 @@ import { ref, watch, nextTick, computed } from 'vue';
 import type { Ref } from 'vue';
 import type { VocaloidSong } from '../type';
 import { useAudioControl } from './useAudioControl';
+import { ANIMATION } from '../constants';
 
 /**
  * Tinderのようなカードスワイプ機能を提供するコンポーザブル関数
@@ -89,8 +90,6 @@ export function useTinderCards(
         if (song?.startTime) {
           video.currentTime = song.startTime;
         }
-        // 再生前の音量をコンソールに表示
-        console.log(`1曲目の音量: ${video.volume}`);
         
         // 音量状態に応じてミュート設定
         video.muted = isMuted.value;
@@ -98,11 +97,6 @@ export function useTinderCards(
         video.play().catch(err => {
           console.error('動画再生エラー:', err);
         });
-        
-        // 再生後の音量も表示
-        setTimeout(() => {
-          console.log(`再生後の1曲目の音量: ${video.volume}, ミュート状態: ${video.muted}`);
-        }, 100);
       } else if (index >= 1 && index <= 2) {
         // 次の2つのカードの動画を準備
         const nextSong = remainingSongs.value[currentSongIndex.value + index];
@@ -257,8 +251,8 @@ export function useTinderCards(
     const cardState = cardStates.value[currentSongIndex.value];
     if (!cardState) return;
 
-    // スワイプの距離が閾値（100px）を超えているかチェック
-    if (Math.abs(cardState.offsetX) > 70) {
+    // スワイプの距離が閾値を超えているかチェック
+    if (Math.abs(cardState.offsetX) > ANIMATION.CARD_SWIPE_THRESHOLD) {
 
       if (cardState.offsetX > 0) {
         // 右にスワイプした場合は「知ってる」と判定
@@ -300,9 +294,8 @@ export function useTinderCards(
     // アニメーションフレーム関数
     const animate = () => {
       const elapsed = Date.now() - startTime;
-      console.log(elapsed);
       const progress = Math.min(elapsed / duration, 1);
-      console.log(`progress:` + progress);
+      
       // X軸の移動（線形）
       cardState.offsetX = targetX * progress;
       
@@ -485,8 +478,8 @@ export function useTinderCards(
       return {
         transform: `translate(${state.offsetX}px, ${state.offsetY}px) rotate(${state.rotation}deg)`,
         transition: 'none',
-        opacity: '1',  // 完全に透明にする
-        pointerEvents: 'none'  // マウスイベントを無効化
+        opacity: '1',
+        pointerEvents: 'none' as const  // TypeScriptの型エラーを修正
       };
     }
     

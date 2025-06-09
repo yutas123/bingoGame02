@@ -2,7 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
 
 /* 共通CSS */
-
 body{
   overflow-x: hidden;
 }
@@ -12,7 +11,6 @@ body{
   padding-inline: 15px;
   font-family: 'Noto Sans JP', sans-serif;
   color: #333;
-  /* overflow-x: hidden;を書くと、min-heightの指定が必要になる謎仕様 */
   overflow-x: hidden;
   min-height: 100vh;
 }
@@ -115,7 +113,6 @@ body{
   left: 0;
   width: 100%;
   height: 100%;
-  /* 斜めのストライプパターン */
   background: repeating-linear-gradient(
     45deg,
     rgba(255, 255, 255, 0.2),
@@ -123,15 +120,7 @@ body{
     rgba(255, 255, 255, 0) 10px,
     rgba(255, 255, 255, 0) 20px
   );
-  /* アニメーションの適用 */
-  animation: progress-bar-stripes 10s linear infinite;
 }
-
-/* アニメーションの定義 */
-/* @keyframes progress-bar-stripes {
-  from { background-position: 0 0; }
-  to { background-position: 50px 0; }
-} */
 
 .progress-text {
   text-align: right;
@@ -147,15 +136,6 @@ body{
   text-align: center;
 }
 
-.song-thumbnail {
-  margin-bottom: 20px;
-}
-
-.song-thumbnail img {
-  border-radius: 10px;
-  max-width: 100%;
-}
-
 .song-title {
   font-size: 1.8rem;
   font-weight: bold;
@@ -169,11 +149,6 @@ body{
   margin-bottom: 5px;
 }
 
-.song-vocalist {
-  font-size: 1rem;
-  color: #888;
-}
-
 .answer-buttons {
   display: flex;
   gap: 20px;
@@ -182,6 +157,7 @@ body{
   margin-bottom: 30px;
 }
 
+/* 共通ボタンスタイル */
 .know-btn, .dont-know-btn {
   padding: 15px 30px;
   border: none;
@@ -208,6 +184,7 @@ body{
   transform: translateY(-3px);
 }
 
+/* 結果画面 */
 .result-card {
   background-color: white;
   margin-top: 30px;
@@ -397,13 +374,6 @@ body{
 }
 
 /* Swiperカードのスタイル */
-.swiper-slide{
-}
-
-.swiper-slide img{
-  /* background: red; */
-}
-
 .card-swiper {
   width: 100%;
   position: relative;
@@ -430,60 +400,6 @@ body{
 
 :deep(.swiper-cards) {
   overflow: visible;
-}
-
-/* スワイプオーバーレイ */
-.swipe-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transition: opacity 0.3s;
-  z-index: 10;
-  pointer-events: none;
-}
-
-.left-overlay {
-  background: linear-gradient(to right, rgba(255, 0, 0, 0.2), transparent);
-  justify-content: flex-start;
-  padding-left: 30px;
-}
-
-.right-overlay {
-  background: linear-gradient(to left, rgba(0, 255, 0, 0.2), transparent);
-  justify-content: flex-end;
-  padding-right: 30px;
-}
-
-.overlay-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 15px;
-  border-radius: 50%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.overlay-icon {
-  font-size: 2rem;
-}
-
-.overlay-text {
-  font-size: 1rem;
-  font-weight: bold;
-  margin-top: 5px;
-}
-
-/* スワイプ中のオーバーレイ表示 */
-:deep(.swiper-slide-prev) .left-overlay,
-:deep(.swiper-slide-next) .right-overlay {
-  opacity: 1;
 }
 
 /* Tinderカードコンテナ */
@@ -556,7 +472,7 @@ body{
 }
 
 /* エフェクト */
-.know-effect, .dont-know-effect, .rare-effect {
+.know-effect, .dont-know-effect {
   position: fixed;
   top: 0;
   left: 0;
@@ -569,7 +485,7 @@ body{
   pointer-events: none;
 }
 
-.effect-content, .rare-content {
+.effect-content {
   background-color: rgba(255, 255, 255, 0.9);
   padding: 30px;
   border-radius: 20px;
@@ -590,58 +506,8 @@ body{
   color: #666;
 }
 
-.effect-trivia {
-  margin-bottom: 20px;
-}
-
-.effect-trivia h3 {
-  font-size: 1.5rem;
-  color: #ff6b9d;
-  margin-bottom: 10px;
-}
-
-.effect-trivia p {
-  font-size: 1.1rem;
-  color: #666;
-  line-height: 1.5;
-}
-
-.effect-action {
-  margin-top: 20px;
-}
-
-.add-to-checklist-btn {
-  background-color: #ff6b9d;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 50px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin: 0 auto;
-  pointer-events: auto;
-}
-
-.rare-title {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #ffaa00;
-  margin-bottom: 15px;
-}
-
-.rare-message {
-  font-size: 1.2rem;
-  color: #666;
-}
-
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
-
   .diagnosis-header h1 {
     font-size: 1.8rem;
   }

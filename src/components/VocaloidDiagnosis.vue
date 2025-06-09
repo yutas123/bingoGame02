@@ -4,6 +4,8 @@
     <div v-if="currentStep === 'start'" class="start-screen">
       <div class="shinyu-bg">
         <swiper
+          v-for="(config, index) in swiperConfigs"
+          :key="index"
           :modules="[Autoplay]"
           :slides-per-view="1"
           :space-between="0"
@@ -11,68 +13,13 @@
           :autoplay="{
             delay: 0,
             disableOnInteraction: false,
-            reverseDirection: false
+            reverseDirection: config.reverse
           }"
           :speed="20000"
           class="title-swiper"
         >
           <swiper-slide v-for="n in 5" :key="n">
             <img src="/src/assets/img/title_bg.svg" alt="Background" class="title-bg-img"/>
-          </swiper-slide>
-        </swiper>
-      
-        <swiper
-          :modules="[Autoplay]"
-          :slides-per-view="1"
-          :space-between="0"
-          :loop="true"
-          :autoplay="{
-            delay: 0,
-            disableOnInteraction: false,
-            reverseDirection: true
-          }"
-          :speed="20000"
-          class="title-swiper"
-        >
-          <swiper-slide v-for="n in 5" :key="n">
-            <img src="/src/assets/img/title_bg.svg" alt="Background" class="title-bg-img"/>
-          </swiper-slide>
-        </swiper>
-      
-
-        <swiper
-          :modules="[Autoplay]"
-          :slides-per-view="1"
-          :space-between="0"
-          :loop="true"
-          :autoplay="{
-            delay: 0,
-            disableOnInteraction: false,
-            reverseDirection: false
-          }"
-          :speed="20000"
-          class="title-swiper"
-        >
-          <swiper-slide v-for="n in 5" :key="n">
-            <img src="/src/assets/img/title_bg.svg" alt="Background" class="title-bg-img" />
-          </swiper-slide>
-        </swiper>
-    
-        <swiper
-          :modules="[Autoplay]"
-          :slides-per-view="1"
-          :space-between="0"
-          :loop="true"
-          :autoplay="{
-            delay: 0,
-            disableOnInteraction: false,
-            reverseDirection: true
-          }"
-          :speed="20000"
-          class="title-swiper"
-        >
-          <swiper-slide v-for="n in 5" :key="n">
-            <img src="/src/assets/img/title_bg.svg" alt="Background" class="title-bg-img" />
           </swiper-slide>
         </swiper>
       </div>
@@ -249,7 +196,7 @@ import ResultScreen from './ResultScreen.vue';
 
 // 型定義をインポート
 import type { VocaloidSong } from '../type';
-import { vocaloidSongs } from '../data/songs';
+import { ANIMATION, PRELOAD, DEFAULT_VIDEO_PATH } from '../constants';
 
 // composablesをインポート
 import { useDiagnosisState } from '../composables/useDiagnosisState';
@@ -257,6 +204,14 @@ import { useDiagnosisLogic } from '../composables/useDiagnosisLogic';
 import { useTinderCards } from '../composables/useTinderCards';
 import { useEffects } from '../composables/useEffects';
 import { useAudioControl } from '../composables/useAudioControl';
+
+// Swiperの設定を配列で管理
+const swiperConfigs = [
+  { reverse: false },
+  { reverse: true },
+  { reverse: false },
+  { reverse: true }
+];
 
 // 状態を取得
 const { 
@@ -268,12 +223,8 @@ const {
   remainingSongs,
   answeredCount,
   totalQuestions,
-  currentSong,
-  eraLabels
+  currentSong
 } = useDiagnosisState();
-// 分割代入で取得しているのは関数の「戻り値」ですが、
-// 関数自体の「実行」は全てのコードを実行します
-
 
 // 診断ロジック
 const { 
@@ -293,7 +244,6 @@ const {
   showKnowEffect,
   showDontKnowEffect,
   currentKnowComment,
-  currentSongForEffect,
   initSounds,
   displayKnowEffect,
   displayDontKnowEffect
@@ -327,24 +277,12 @@ const {
 
 // 動画パスを取得する関数
 const getVideoPath = (song: VocaloidSong) => {
-  // 曲に動画パスが指定されている場合はそれを使用
   if (song.videoPath) {
     return `/src/assets/movie/${song.videoPath}`;
   }
   
-  // 指定がない場合は時代区分に基づいてデフォルト動画を割り当て
-  switch (song.era) {
-    case 'dawn':
-    case 'firstBoom':
-      return '/src/assets/movie/uchiage.mp4';
-    case 'golden':
-    case 'mature':
-      return '/src/assets/movie/kyukura.mp4';
-    case 'modern':
-      return '/src/assets/movie/goodbye.mp4';
-    default:
-      return '/src/assets/movie/kyukura.mp4'; // フォールバック
-  }
+  // デフォルト動画パス
+  return DEFAULT_VIDEO_PATH;
 };
 
 // 読み込み進捗を管理する変数
@@ -355,7 +293,6 @@ const preloadedVideos = ref<HTMLVideoElement[]>([]);
 
 // 最初の3曲の動画をプリロードする関数
 const preloadInitialVideos = () => {
-  // 読み込み進捗を0にリセット
   loadingProgress.value = 0;
   
   // 既存のプリロード済み動画をクリア
@@ -365,14 +302,14 @@ const preloadInitialVideos = () => {
   preloadedVideos.value = [];
 
   // 最初の3曲を取得
-  const initialSongs = vocaloidSongs.slice(0, 3);
+  const initialSongs = diagnosisSongs.value.slice(0, PRELOAD.INITIAL_VIDEOS);
   
   // 読み込み進捗の計算用
   const totalVideos = initialSongs.filter(song => song.videoPath).length;
   let loadedVideos = 0;
   
   // 各曲の動画をプリロード
-  initialSongs.forEach((song, index) => {
+  initialSongs.forEach((song) => {
     if (song.videoPath) {
       const video = document.createElement('video');
       video.preload = 'auto';
@@ -380,59 +317,42 @@ const preloadInitialVideos = () => {
       video.style.display = 'none';
       video.src = `/src/assets/movie/${song.videoPath}#t=${song.startTime ?? 0.1}`;
       
-      // ロード状態をログ出力
       video.addEventListener('loadstart', () => {
-        console.log(`プリロード開始: ${song.title}`);
-        // 読み込み開始時に少し進捗を進める
-        loadingProgress.value += 5;
+        loadingProgress.value += PRELOAD.PROGRESS_INCREMENT;
       });
       
       video.addEventListener('canplay', () => {
-        console.log(`プリロード完了: ${song.title}`);
-        // 動画が再生可能になったら進捗を更新
         loadedVideos++;
-        // 各動画の読み込み完了で進捗を更新（最大95%まで）
-        loadingProgress.value = Math.min(95, (loadedVideos / totalVideos) * 95);
+        loadingProgress.value = Math.min(PRELOAD.MAX_PROGRESS, (loadedVideos / totalVideos) * PRELOAD.MAX_PROGRESS);
         
-        // すべての動画がロードされたら100%にする
         if (loadedVideos === totalVideos) {
-          // 少し遅延を入れて100%にする（視覚効果のため）
           setTimeout(() => {
             loadingProgress.value = 100;
-          }, 500);
+          }, PRELOAD.COMPLETE_DELAY);
         }
       });
       
-      video.addEventListener('error', (e) => {
-        console.error(`プリロードエラー: ${song.title}`, e);
-        // エラー時も進捗を進める（ユーザー体験のため）
+      video.addEventListener('error', () => {
         loadedVideos++;
-        loadingProgress.value = Math.min(95, (loadedVideos / totalVideos) * 95);
+        loadingProgress.value = Math.min(PRELOAD.MAX_PROGRESS, (loadedVideos / totalVideos) * PRELOAD.MAX_PROGRESS);
         
-        // すべての動画の処理が完了したら100%にする
         if (loadedVideos === totalVideos) {
           setTimeout(() => {
             loadingProgress.value = 100;
-          }, 500);
+          }, PRELOAD.COMPLETE_DELAY);
         }
       });
 
-      // load()メソッドを呼び出してロードを開始
       video.load();
-      
-      // 配列に追加
       preloadedVideos.value.push(video);
-      
-      // bodyに追加（非表示）
       document.body.appendChild(video);
     }
   });
   
-  // 動画がない場合や読み込みが遅い場合のフォールバック
-  // 10秒後に強制的に100%にする
+  // フォールバック
   setTimeout(() => {
     loadingProgress.value = 100;
-  }, 10000);
+  }, PRELOAD.TIMEOUT);
 };
 
 // デバッグ用：全ての曲を「知ってる」としてマークし、結果画面に遷移する関数
@@ -452,18 +372,12 @@ const debugAllKnown = () => {
 
 // ページロード時の処理
 onMounted(() => {
-  // 効果音の初期化
   initSounds();
-  
-  // 初期状態をスタート画面に設定
   currentStep.value = 'start';
   
-  // 通常の処理
-  // スタート画面で最初の3曲をプリロード
   if (currentStep.value === 'start') {
     preloadInitialVideos();
   }
-  // 診断画面が表示されたら動画の再生制御を行う
   else if (currentStep.value === 'diagnosis') {
     controlVideos();
   }
@@ -481,27 +395,21 @@ onMounted(() => {
 .shinyu-bg {
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* 均等に配置 */
+  justify-content: space-between;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  z-index: 0; /* .start-screenの子要素内での最背面 */
+  z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  gap: 0; /* コンポーネント間の余白をなくす */
-}
-
-/* Swiperコンテナのスタイル */
-.swiper-container {
-  width: 100%;
+  gap: 0;
 }
 
 /* Swiperスライダーのスタイル */
 .title-swiper {
   width: 100%;
-  /* height: calc(100vh / 4); */
   flex: 1 1 0%;
   margin: 0;
   padding: 0;
@@ -511,7 +419,7 @@ onMounted(() => {
 .title-bg-img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* containからcoverに変更して、画像が全体を覆うようにする */
+  object-fit: cover;
   margin: 0;
   padding: 0;
 }
@@ -545,39 +453,6 @@ onMounted(() => {
   padding: 0;
 }
 
-/* キャラクター画像の背景円 */
-.circle-bg {
-  position: absolute;
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  background: #FFCC00;
-  z-index: 1; /* .shinyu-bgよりも前面 */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-/* キャラクター画像 */
-.start-image {
-  position: relative;
-  width: 300px;
-  height: 300px;
-  margin: 50px auto 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1; /* .shinyu-bgよりも前面 */
-}
-
-.character-image {
-  width: 250px;
-  height: auto;
-  position: relative;
-  z-index: 2; /* .circle-bgよりも前面 */
-  border-radius: 50%;
-}
-
 /* 100%表示 */
 .percentage {
   font-size: 4rem;
@@ -588,7 +463,7 @@ onMounted(() => {
   position: relative;
   display: inline-block;
   width: 100%;
-  z-index: 1; /* .shinyu-bgよりも前面 */
+  z-index: 1;
 }
 
 .percent-symbol {
@@ -625,7 +500,7 @@ onMounted(() => {
   font-size: 0.8rem;
   line-height: 1.6;
   position: relative;
-  z-index: 1; /* .shinyu-bgよりも前面 */
+  z-index: 1;
 }
 
 /* スタートボタン */
@@ -645,7 +520,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1; /* .shinyu-bgよりも前面 */
+  z-index: 1;
 }
 
 .arrow-icon {
@@ -678,28 +553,9 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.3);
 }
 
-.thumbnail-image {
-  width: 100%;
-  height: auto;
-  height: 200px;
-  border-radius: 30px 30px 0 0;
-  object-fit: cover;
-  display: block;
-  margin-bottom: 10px;
-}
-
-.start-image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px auto;
-  max-width: 300px;
-}
-
 .thumbnail-video {
   width: 100%;
   border-radius: 30px 30px 0 0;
-  /* レイアウトシフトを防ぐため */
   aspect-ratio: 16 / 9;
   background-color: #000;
 }
@@ -726,7 +582,6 @@ onMounted(() => {
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border-radius: 30px;
   box-shadow: rgb(237 237 237 / 60%) 0px 5px 20px;
-  /* box-shadow: rgba(186, 231, 254, 0.6) 0px 5px 20px; */
   background-color: #fff;
   transform-origin: center center;
 }
@@ -761,6 +616,7 @@ onMounted(() => {
   font-size: 0.7rem;
   color: #999;
 }
+
 /* 音量ボタンのスタイル */
 .volume-btn {
   background: none;
@@ -811,25 +667,11 @@ onMounted(() => {
   height: 24px;
 }
 
-/* スタート画面の音量ボタン */
-.diagnosis-header .volume-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
 /* 診断画面の音量ボタン */
 .progress-bar-container .volume-btn {
   position: absolute;
   right: 10px;
   top: 10px;
-}
-
-/* 結果画面の音量ボタン */
-.result-volume-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
 }
 
 /* デバッグボタンのスタイル */
@@ -870,7 +712,6 @@ onMounted(() => {
   width: 100%;
   max-width: 280px;
   margin-bottom: 45px;
-  /* padding-top: 10px; SVGの位置調整用 */
   z-index: 1;
 }
 
@@ -893,59 +734,5 @@ onMounted(() => {
   padding: 20px;
   z-index: 2;
   height: 240px;
-}
-
-/* カードコンテンツ部分 */
-.card-content {
-  width: 100%;
-  text-align: center;
-}
-
-/* スワイプ指示部分 */
-.swipe-instruction {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-  padding: 0 10px;
-}
-
-/* スワイプ方向 */
-.swipe-direction {
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-  color: #555;
-}
-
-/* 左方向 */
-.swipe-direction.left {
-  color: #ff4b4b; /* 色を鮮明に */
-}
-
-/* 右方向 */
-.swipe-direction.right {
-  color: #00c2a8; /* 色を鮮明に */
-}
-
-/* 方向アイコン */
-.direction-icon {
-  font-size: 1.3rem; /* サイズを大きく */
-  font-weight: bold;
-  margin: 0 5px;
-}
-
-/* 方向テキスト */
-.direction-text {
-  font-weight: bold;
-  font-size: 1rem; /* サイズを大きく */
-}
-
-/* スワイプ説明 */
-.swipe-description {
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 5px;
-  padding-top: 10px;
-  border-top: 1px dashed #eee;
 }
 </style>
