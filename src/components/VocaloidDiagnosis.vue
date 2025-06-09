@@ -156,13 +156,13 @@
           :key="song.id"
           :class="{ 'top-card': index === 0 }"
           :style="getCardStyle(index)"
-            @mousedown="startDrag"
-            @mousemove="onDrag"
-            @mouseup="endDrag"
-            @mouseleave="endDrag"
-            @touchstart="startDrag"
-            @touchmove="onDrag"
-            @touchend="endDrag"
+          @mousedown="startDrag"
+          @mousemove="onDrag"
+          @mouseup="endDrag"
+          @mouseleave="endDrag"
+          @touchstart="startDrag"
+          @touchmove="onDrag"
+          @touchend="endDrag"
         >
         <video 
           class="thumbnail-video" 
@@ -335,12 +335,13 @@ const getVideoPath = (song: VocaloidSong) => {
   // 指定がない場合は時代区分に基づいてデフォルト動画を割り当て
   switch (song.era) {
     case 'dawn':
-    case 'firstBoom':
+    case 'boom':
       return '/src/assets/movie/uchiage.mp4';
-    case 'golden':
-    case 'mature':
+    case 'gold':
+    case 'diserve':
       return '/src/assets/movie/kyukura.mp4';
-    case 'modern':
+    case 'revival':
+    case 'ai':
       return '/src/assets/movie/goodbye.mp4';
     default:
       return '/src/assets/movie/kyukura.mp4'; // フォールバック

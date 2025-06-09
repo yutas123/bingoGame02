@@ -38,10 +38,11 @@ export function useDiagnosisState() {
   // 時代ラベル
   const eraLabels = {
     dawn: '黎明期 (2007-2009)',
-    firstBoom: '第一次ブーム (2010-2012)',
-    golden: '全盛期 (2013-2015)',
-    mature: '成熟期 (2016-2018)',
-    modern: '現代 (2019-)'
+    boom: '第一次ブーム (2010-2012)',
+    gold: '全盛期 (2013-2015)',
+    diserve: '成熟期 (2016-2018)',
+    revival: '復活期 (2019-2021)',
+    ai: 'AI時代 (2022-)'
   };
   
   return {

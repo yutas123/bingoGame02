@@ -486,7 +486,7 @@ export function useTinderCards(
         transform: `translate(${state.offsetX}px, ${state.offsetY}px) rotate(${state.rotation}deg)`,
         transition: 'none',
         opacity: '1',  // 完全に透明にする
-        pointerEvents: 'none'  // マウスイベントを無効化
+        pointerEvents: 'none' as const  // マウスイベントを無効化
       };
     }
     
