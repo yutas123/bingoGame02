@@ -71,17 +71,17 @@
         <div class="share-buttons">
           <!-- Xボタン -->
           <button @click="shareToTwitter" class="share-btn x-btn" aria-label="Xでシェア">
-            <img src="../assets/img/X_Logo.svg" alt="X" class="share-icon">
+            <img src="/img/X_Logo.svg" alt="X" class="share-icon">
           </button>
           
           <!-- Facebookボタン -->
           <button @click="shareToFacebook" class="share-btn facebook-btn" aria-label="Facebookでシェア">
-            <img src="../assets/img/Facebook_Logo.png" alt="Facebook" class="share-icon">
+            <img src="/img/Facebook_Logo.png" alt="Facebook" class="share-icon">
           </button>
           
           <!-- LINEボタン -->
           <button @click="shareToLine" class="share-btn line-btn" aria-label="LINEでシェア">
-            <img src="../assets/img/LINE_Logo.png" alt="LINE" class="share-icon">
+            <img src="/img/LINE_Logo.png" alt="LINE" class="share-icon">
           </button>
         </div>
       </div>
@@ -117,10 +117,10 @@ const getSongThumbnail = (song: VocaloidSong): string => {
   // videoPathから拡張子を変更してサムネイルパスを生成
   if (song.videoPath) {
     const thumbnailName = song.videoPath.replace('.mp4', '.jpg');
-    return `/src/assets/img/thumbnails/${thumbnailName}`;
+    return `/img/thumbnails/${thumbnailName}`;
   }
   // videoPathがない場合はデフォルト画像
-  return '/src/assets/img/thumbnail.jpg';
+  return '/img/thumbnail.jpg';
 };
 
 // 時代の日本語名マッピング
@@ -408,7 +408,7 @@ const resultType = computed(() => {
 
 .song-box {
   aspect-ratio: 1 / 1;
-  background-image: url('/src/assets/img/thumbnail.jpg');
+  background-image: url('/img/thumbnail.jpg');
   background-size: cover;
   background-position: center;
   display: flex;

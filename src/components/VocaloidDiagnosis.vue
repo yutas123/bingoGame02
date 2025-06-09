@@ -17,7 +17,7 @@
           class="title-swiper"
         >
           <swiper-slide v-for="n in 5" :key="n">
-            <img src="/src/assets/img/title_bg.svg" alt="Background" class="title-bg-img"/>
+            <img src="/img/title_bg.svg" alt="Background" class="title-bg-img"/>
           </swiper-slide>
         </swiper>
       
@@ -35,7 +35,7 @@
           class="title-swiper"
         >
           <swiper-slide v-for="n in 5" :key="n">
-            <img src="/src/assets/img/title_bg.svg" alt="Background" class="title-bg-img"/>
+            <img src="/img/title_bg.svg" alt="Background" class="title-bg-img"/>
           </swiper-slide>
         </swiper>
       
@@ -54,7 +54,7 @@
           class="title-swiper"
         >
           <swiper-slide v-for="n in 5" :key="n">
-            <img src="/src/assets/img/title_bg.svg" alt="Background" class="title-bg-img" />
+            <img src="/img/title_bg.svg" alt="Background" class="title-bg-img" />
           </swiper-slide>
         </swiper>
     
@@ -72,7 +72,7 @@
           class="title-swiper"
         >
           <swiper-slide v-for="n in 5" :key="n">
-            <img src="/src/assets/img/title_bg.svg" alt="Background" class="title-bg-img" />
+            <img src="/img/title_bg.svg" alt="Background" class="title-bg-img" />
           </swiper-slide>
         </swiper>
       </div>
@@ -115,8 +115,8 @@
       
       <!-- 音量ボタン（グローバル設定） -->
       <button @click="toggleMute" class="volume-btn" title="音声設定（全体に適用されます）">
-        <img v-if="isMuted" src="/src/assets/img/volume_off.svg" alt="ミュート" class="volume-icon">
-        <img v-else src="/src/assets/img/volume_on.svg" alt="音量オン" class="volume-icon">
+        <img v-if="isMuted" src="/img/volume_off.svg" alt="ミュート" class="volume-icon">
+        <img v-else src="/img/volume_on.svg" alt="音量オン" class="volume-icon">
         <span class="volume-tooltip">音量設定</span>
       </button>
     </div>
@@ -131,8 +131,8 @@
           <div class="progress-text">{{ answeredCount }}/{{ totalQuestions }}曲</div>
           <!-- 音量ボタン（グローバル設定） -->
           <button @click="toggleMute" class="volume-btn" title="音声設定（全体に適用されます）">
-            <img v-if="isMuted" src="/src/assets/img/volume_off.svg" alt="ミュート" class="volume-icon">
-            <img v-else src="/src/assets/img/volume_on.svg" alt="音量オン" class="volume-icon">
+            <img v-if="isMuted" src="/img/volume_off.svg" alt="ミュート" class="volume-icon">
+            <img v-else src="/img/volume_on.svg" alt="音量オン" class="volume-icon">
             <span class="volume-tooltip">音量設定</span>
           </button>
         </div>
@@ -327,22 +327,22 @@ const {
 const getVideoPath = (song: VocaloidSong) => {
   // 曲に動画パスが指定されている場合はそれを使用
   if (song.videoPath) {
-    return `/src/assets/movie/${song.videoPath}`;
+    return `/movies/${song.videoPath}`;
   }
   
   // 指定がない場合は時代区分に基づいてデフォルト動画を割り当て
   switch (song.era) {
     case 'dawn':
     case 'boom':
-      return '/src/assets/movie/uchiage.mp4';
+      return '/movies/uchiage.mp4';
     case 'gold':
     case 'diserve':
-      return '/src/assets/movie/kyukura.mp4';
+      return '/movies/kyukura.mp4';
     case 'revival':
     case 'ai':
-      return '/src/assets/movie/goodbye.mp4';
+      return '/movies/goodbye.mp4';
     default:
-      return '/src/assets/movie/kyukura.mp4'; // フォールバック
+      return '/movies/kyukura.mp4'; // フォールバック
   }
 };
 
@@ -377,7 +377,7 @@ const preloadInitialVideos = () => {
       video.preload = 'auto';
       video.muted = true;
       video.style.display = 'none';
-      video.src = `/src/assets/movie/${song.videoPath}#t=${song.startTime ?? 0.1}`;
+      video.src = `/movies/${song.videoPath}#t=${song.startTime ?? 0.1}`;
       
       // ロード状態をログ出力
       video.addEventListener('loadstart', () => {
