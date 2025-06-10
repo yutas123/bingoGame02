@@ -3,7 +3,7 @@
  * 進捗コメント機能を提供するVue Composable
  * ユーザーが特定の節目に達した時にやる気を刺激するコメントを表示します
  */
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 /**
  * 進捗コメントの設定

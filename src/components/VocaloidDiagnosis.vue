@@ -451,19 +451,19 @@ const preloadInitialVideos = () => {
 };
 
 // デバッグ用：全ての曲を「知ってる」としてマークし、結果画面に遷移する関数
-const debugAllKnown = () => {
-  // 全ての曲のIDを取得
-  const allSongIds = diagnosisSongs.value.map(song => song.id);
+// const debugAllKnown = () => {
+//   // 全ての曲のIDを取得
+//   const allSongIds = diagnosisSongs.value.map(song => song.id);
   
-  // 全ての曲を回答済みとしてマーク
-  answeredSongs.value = [...allSongIds];
+//   // 全ての曲を回答済みとしてマーク
+//   answeredSongs.value = [...allSongIds];
   
-  // 全ての曲を「知ってる」としてマーク
-  knownSongs.value = [...allSongIds];
+//   // 全ての曲を「知ってる」としてマーク
+//   knownSongs.value = [...allSongIds];
   
-  // 結果画面に遷移
-  currentStep.value = 'result';
-};
+//   // 結果画面に遷移
+//   currentStep.value = 'result';
+// };
 
 // 進捗コメントの監視
 watch(() => answeredSongs.value.length, (newCount) => {
