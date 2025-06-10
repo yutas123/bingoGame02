@@ -233,7 +233,8 @@ const hasAllRoundCoverage = computed(() => {
 
 // シェア機能の関数
 const getShareText = () => {
-  return `ボカロ診断の結果：${resultType.value.name}です。${highestEra.value.name}が得意です！ #ボカロ診断`;
+  const descriptions = resultType.value.description.join(' ');
+  return `あなたは${resultType.value.name}です！${descriptions}！ #ボカろぐ`;
 };
 
 const shareToTwitter = () => {
@@ -260,7 +261,7 @@ const resultType = computed(() => {
     return {
       id: 'expert',
       name: 'マニアタイプ',
-      description: ['どの時代も高水準で網羅。', 'もはやボカロの語り部かもしれません。']
+      description: ['どの時代も高水準で網羅', 'もはやボカロの語り部かもしれません']
     };
   }
   
@@ -269,7 +270,7 @@ const resultType = computed(() => {
     return {
       id: 'deep',
       name: '深掘り探究タイプ',
-      description: ['知っているだけでなく、しっかり掘り下げてきた実感があります。']
+      description: ['知っているだけでなく、しっかり掘り下げてきた実感があります']
     };
   }
   
@@ -278,7 +279,7 @@ const resultType = computed(() => {
     return {
       id: 'focus',
       name: `${highestEra.value.name}フォーカスタイプ`,
-      description: ['ある時代にグッと響くものがあるようですね。', '芯のある好みが光ります。']
+      description: ['ある時代にグッと響くものがあるようですね', '芯のある好みが光ります']
     };
   }
   
@@ -287,7 +288,7 @@ const resultType = computed(() => {
     return {
       id: 'allround',
       name: 'まんべんなくタイプ',
-      description: ['どの時代もバランスよく押さえています。', '幅広い視点をお持ちです。']
+      description: ['どの時代もバランスよく押さえています', '幅広い視点をお持ちです']
     };
   }
   
@@ -296,7 +297,7 @@ const resultType = computed(() => {
     return {
       id: 'knowledgeable',
       name: 'ものしりタイプ',
-      description: ['豊富な知識をお持ちですね。', '好きな曲を中心に幅広く楽しんでいますね。']
+      description: ['豊富な知識をお持ちですね', '好きな曲を中心に幅広く楽しんでいますね']
     };
   }
   
@@ -305,7 +306,7 @@ const resultType = computed(() => {
     return {
       id: 'casual',
       name: 'カジュアルタイプ',
-      description: ['有名どころはしっかり押さえています。', 'これから深掘りしていく楽しみがありますね。']
+      description: ['有名どころはしっかり押さえています', 'これから深掘りしていく楽しみがありますね']
     };
   }
   
@@ -313,7 +314,7 @@ const resultType = computed(() => {
   return {
     id: 'newcomer',
     name: 'ビギナータイプ',
-    description: ['ボカロの入り口に立ったばかり。', 'これからの出会いが楽しみですね。']
+    description: ['ボカロの入り口に立ったばかり', 'これからの出会いが楽しみですね']
   };
 });
 </script>
