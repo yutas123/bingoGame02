@@ -13,8 +13,8 @@ body{
   font-family: 'Noto Sans JP', sans-serif;
   color: #333;
   /* overflow-x: hidden;を書くと、min-heightの指定が必要になる謎仕様 */
-  overflow-x: hidden;
-  min-height: 100vh;
+  /* overflow-x: hidden; */
+  /* min-height: 100vh; */
 }
 
 /* スタート画面 */
@@ -82,7 +82,7 @@ body{
 }
 
 .diagnosis-screen-header{
-  margin-top: 60px;
+  padding-top: 60px;
   margin-bottom: 15px;
 }
 

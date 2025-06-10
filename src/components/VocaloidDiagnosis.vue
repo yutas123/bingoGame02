@@ -218,11 +218,11 @@
           </button>
         </div>
         <!-- デバッグ用ボタン -->
-        <div class="debug-button-container">
+        <!-- <div class="debug-button-container">
           <button type="button" @click="debugAllKnown" class="debug-btn">
             デバッグ：全て知ってる
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
     
