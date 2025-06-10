@@ -58,7 +58,7 @@ export function useProgressComments() {
       // 3秒後にコメントを非表示にする
       setTimeout(() => {
         hideProgressComment();
-      }, 3000);
+      }, 1000);
     }
   };
   
