@@ -200,6 +200,13 @@
         </div>
       </div>
       
+      <!-- 進捗コメント -->
+      <div v-if="showProgressComment" class="progress-comment" :class="{ 'animating': isAnimating }">
+        <div class="progress-comment-content">
+          <div class="progress-comment-text">{{ currentProgressComment }}</div>
+        </div>
+      </div>
+      
       
       <div class="padded-content">
         <div class="manual-buttons">
@@ -232,7 +239,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import 'animate.css';
 import { Vue3Lottie } from 'vue3-lottie';
 import swipeAnimation from '../assets/lottie/swipe.json';
@@ -257,6 +264,7 @@ import { useDiagnosisLogic } from '../composables/useDiagnosisLogic';
 import { useTinderCards } from '../composables/useTinderCards';
 import { useEffects } from '../composables/useEffects';
 import { useAudioControl } from '../composables/useAudioControl';
+import { useProgressComments } from '../composables/useProgressComments';
 
 // 状態を取得
 const { 
@@ -299,6 +307,14 @@ const {
 
 // 音声制御関連
 const { toggleMute, isMuted } = useAudioControl('VocaloidDiagnosis');
+
+// 進捗コメント関連
+const {
+  showProgressComment,
+  currentProgressComment,
+  isAnimating,
+  displayProgressComment
+} = useProgressComments();
 
 // Tinderカード関連
 const {
@@ -448,6 +464,14 @@ const debugAllKnown = () => {
   // 結果画面に遷移
   currentStep.value = 'result';
 };
+
+// 進捗コメントの監視
+watch(() => answeredSongs.value.length, (newCount) => {
+  // 診断中のみ進捗コメントを表示
+  if (currentStep.value === 'diagnosis' && newCount > 0) {
+    displayProgressComment(newCount);
+  }
+});
 
 // ページロード時の処理
 onMounted(() => {
@@ -946,5 +970,62 @@ onMounted(() => {
   margin-top: 5px;
   padding-top: 10px;
   border-top: 1px dashed #eee;
+}
+
+/* 進捗コメントのスタイル */
+.progress-comment {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.progress-comment.animating {
+  opacity: 1;
+}
+
+.progress-comment-content {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  animation: progressCommentBounce 0.6s ease-out;
+}
+
+.progress-comment-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes progressCommentBounce {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 480px) {
+  .progress-comment-content {
+    padding: 15px 25px;
+  }
+  
+  .progress-comment-text {
+    font-size: 1.2rem;
+  }
 }
 </style>
