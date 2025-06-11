@@ -234,7 +234,7 @@ const hasAllRoundCoverage = computed(() => {
 // シェア機能の関数
 const getShareText = () => {
   const descriptions = resultType.value.description.join(' ');
-  return `あなたは${resultType.value.name}です！${descriptions}！ #ボカろぐ`;
+  return `診断結果：あなたは${resultType.value.name}です！${descriptions}！ #ボカろぐ`;
 };
 
 const shareToTwitter = () => {
